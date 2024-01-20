@@ -7,6 +7,7 @@ let items = require("../fakeDb");
 
 let pickles = { name: "Pickles", price: 4.99 };
 
+
 beforeEach(function () {
     items.push(pickles);
 });
@@ -19,7 +20,7 @@ describe("GET /items", () => {
     test("Get all items", async () => {
         const res = await request(app).get("/items");
         expect(res.statusCode).toBe(200)
-        expect(res.body).toEqual({ items: [pickles] })
+        expect(res.body).toEqual({ items: [pickles] });
     })
 },)
 
@@ -27,7 +28,7 @@ describe("GET /items/:name", () => {
     test("Get item by name", async () => {
         const res = await request(app).get(`/items/${pickles.name}`);
         expect(res.statusCode).toBe(200)
-        expect(res.body).toEqual({ item: pickles })
+        expect(res.body).toEqual({ added: { item: pickles } })
     })
     test("Responds with 404 for invalid item", async () => {
         const res = await request(app).get(`/items/icecube`);
@@ -51,7 +52,7 @@ describe("/PATCH /items/:name", () => {
     test("Updating a item's name", async () => {
         const res = await request(app).patch(`/items/${pickles.name}`).send({ name: "Monster", price: 1.99 });
         expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({ item: { name: "Monster", price: 1.99 } });
+        expect(res.body).toEqual({ updated: { item: { name: "Monster", price: 1.99 } } });
     })
     test("Responds with 404 for invalid name", async () => {
         const res = await request(app).patch(`/items/Piggles`).send({ name: "Monster" });

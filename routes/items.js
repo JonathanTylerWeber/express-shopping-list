@@ -9,6 +9,7 @@ router.get("/", function (req, res) {
 
 router.post("/", function (req, res, next) {
     try {
+        // console.log("Received POST request:", req.body);
         if (!req.body.name || !req.body.price) throw new ExpressError("Name and price are required", 400);
         const newItem = { name: req.body.name, price: req.body.price }
         items.push(newItem)
@@ -27,13 +28,18 @@ router.get("/:name", function (req, res) {
 })
 
 router.patch("/:name", function (req, res) {
-    const foundItem = items.find(item => item.name === req.params.name)
-    if (foundItem === undefined) {
-        throw new ExpressError("Item not found", 404)
+    const foundItem = items.find(item => item.name === req.params.name);
+    if (!foundItem) {
+        throw new ExpressError("Item not found", 404);
     }
-    foundItem.name = req.body.name
-    res.json({ 'updated': { item: foundItem } })
-})
+    if (!req.body.name || req.body.price === undefined) {
+        throw new ExpressError("Both name and price are required for update", 400);
+    }
+    foundItem.name = req.body.name;
+    foundItem.price = req.body.price;
+
+    res.json({ 'updated': { item: foundItem } });
+});
 
 router.delete("/:name", function (req, res) {
     const foundItem = items.findIndex(item => item.name === req.params.name)

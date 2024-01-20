@@ -1,10 +1,10 @@
 const express = require("express")
 const app = express();
-const shopRoutes = require("./routes/shop")
+const itemsRoutes = require("./routes/items")
 const ExpressError = require("./expressError")
 
 app.use(express.json());
-app.use("/shop", shopRoutes);
+app.use("/items", itemsRoutes);
 
 app.use(function (req, res, next) {
     return new ExpressError("Not Found", 404);
